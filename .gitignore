@@ -49,3 +49,5 @@ app.*.map.json
 .firebaserc
 .firebase/
 firebase.json
+
+.README.md
