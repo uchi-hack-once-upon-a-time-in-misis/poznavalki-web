@@ -75,7 +75,7 @@ class SearchCubit extends Cubit<SearchState> {
     // );
 
     var rez = await http.get(
-      Uri.parse('https://poz-app.herokuapp.com/search?theme=l&body=l'),
+      Uri.parse('https://poz-app.herokuapp.com/search?theme=${theme}&body=${body}'),
     );
 
     SearchResult result = SearchResult(pics: [], sites: [], vids: []);
