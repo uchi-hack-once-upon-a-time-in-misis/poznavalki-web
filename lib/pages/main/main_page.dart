@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uchi_web/pages/search_screen/search_cubit.dart';
 import 'package:uchi_web/pages/search_screen/search_screen.dart';
+import 'package:uchi_web/pages/settings_screen/settings_screen.dart';
 import 'package:uchi_web/shared/colors.dart';
 
 class MainPage extends StatefulWidget {
@@ -33,6 +34,8 @@ class _MainPageState extends State<MainPage> {
                   create: (c) => SearchCubit(),
                   child: SearchScreen(),
                 );
+              case "settings":
+                return SettingsScreen();
               default:
                 return Container();
             }
@@ -50,7 +53,7 @@ class _MainPageState extends State<MainPage> {
               highlightColor: Colors.transparent,
               color: (() {
                 if (screen == "main") {
-                  return buttonDark;
+                  return dark;
                 }
                 return grey;
               }()),
@@ -67,7 +70,7 @@ class _MainPageState extends State<MainPage> {
               highlightColor: Colors.transparent,
               color: (() {
                 if (screen == "settings") {
-                  return buttonDark;
+                  return dark;
                 }
                 return grey;
               }()),

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:uchi_web/pages/search_screen/links_list/link_widget.dart';
+import 'package:uchi_web/pages/search_screen/searches_list.dart/search_widget.dart';
 import 'package:uchi_web/shared/colors.dart';
-import 'package:uchi_web/shared/models/media_piece.dart';
+import 'package:uchi_web/shared/models/search_request.dart';
 
-class LinksList extends StatelessWidget {
-  LinksList({Key? key, required this.mediaPieces}) : super(key: key);
+class SearchesList extends StatelessWidget {
+  SearchesList({Key? key, required this.searchRequests}) : super(key: key);
 
-  List<MediaPiece> mediaPieces;
+  List<SearchRequest> searchRequests;
 
   @override
   Widget build(BuildContext context) {
-    int length = mediaPieces.length;
+    int length = searchRequests.length;
     if (length == 0) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 20),
@@ -29,25 +29,15 @@ class LinksList extends StatelessWidget {
     int i = 0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: mediaPieces.map((e) {
+      children: searchRequests.map((e) {
         ++i;
         return Container(
-          child: LinkWidget(
-            mediaPiece: e,
+          child: SearchWidget(
+            searchRequest: e,
           ),
           padding: EdgeInsets.only(bottom: i < length ? 20 : 0),
         );
       }).toList(),
     );
-    // return ListView.builder(
-    //   padding: EdgeInsets.all(0),
-    //   physics: BouncingScrollPhysics(),
-    //   itemCount: mediaPieces.length,
-    //   itemBuilder: (BuildContext context, int index) {
-    //     return LinkWidget(
-    //       mediaPiece: mediaPieces[index],
-    //     );
-    //   },
-    // );
   }
 }

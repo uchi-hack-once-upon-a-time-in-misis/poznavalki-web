@@ -5,10 +5,13 @@ import 'package:uchi_web/shared/button.dart';
 import 'package:uchi_web/shared/colors.dart';
 
 class HeaderContent extends StatelessWidget {
-  HeaderContent({Key? key}) : super(key: key);
+  HeaderContent({Key? key, this.initTheme, this.initBody}) : super(key: key);
 
-  TextEditingController themeController = TextEditingController();
-  TextEditingController bodyController = TextEditingController();
+  String? initTheme;
+  String? initBody;
+
+  late TextEditingController themeController = TextEditingController(text: initTheme);
+  late TextEditingController bodyController = TextEditingController(text: initBody);
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +49,14 @@ class HeaderContent extends StatelessWidget {
             child: TextField(
               controller: themeController,
               style: TextStyle(
+                color: dark,
                 fontSize: 17,
                 fontFamily: "SF-Pro-Display",
               ),
               decoration: InputDecoration(
                 isDense: true,
                 contentPadding: EdgeInsets.all(17),
-                hintText: "Тема",
+                hintText: "Введите тему",
                 hintStyle: TextStyle(color: grey),
                 border: InputBorder.none,
               ),
@@ -71,13 +75,14 @@ class HeaderContent extends StatelessWidget {
               minLines: 1,
               controller: bodyController,
               style: TextStyle(
+                color: dark,
                 fontSize: 17,
                 fontFamily: "SF-Pro-Display",
               ),
               decoration: InputDecoration(
                 isDense: true,
                 contentPadding: EdgeInsets.all(17),
-                hintText: "Описание/материал",
+                hintText: "Введите описание или материал",
                 hintStyle: TextStyle(color: grey),
                 border: InputBorder.none,
               ),
@@ -88,7 +93,8 @@ class HeaderContent extends StatelessWidget {
             borderRadius: 16,
             padding: EdgeInsets.all(15),
             onTap: () {
-              BlocProvider.of<SearchCubit>(context).loadContent();
+              BlocProvider.of<SearchCubit>(context)
+                  .loadContent(themeController.text, bodyController.text);
             },
             child: Center(
               child: Text(

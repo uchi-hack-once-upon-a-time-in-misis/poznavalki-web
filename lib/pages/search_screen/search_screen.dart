@@ -5,6 +5,7 @@ import 'package:uchi_web/pages/search_screen/links_list/links_list.dart';
 import 'package:uchi_web/pages/search_screen/media_type_switcher/media_type_switcher.dart';
 import 'package:uchi_web/pages/search_screen/media_types.dart';
 import 'package:uchi_web/pages/search_screen/search_cubit.dart';
+import 'package:uchi_web/pages/search_screen/searches_list.dart/searches_list.dart';
 import 'package:uchi_web/pages/search_screen/states/search_finging.dart';
 import 'package:uchi_web/pages/search_screen/states/search_found.dart';
 import 'package:uchi_web/pages/search_screen/states/search_initial_loaded.dart';
@@ -35,11 +36,25 @@ class _SearchScreenState extends State<SearchScreen> {
             return Stack(
               children: [
                 SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: ClampingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      HeaderContent(),
+                      (() {
+                        if (state is SearchFinding) {
+                          return HeaderContent(
+                            initBody: state.body,
+                            initTheme: state.theme,
+                          );
+                        }
+                        if (state is SearchFound) {
+                          return HeaderContent(
+                            initBody: state.body,
+                            initTheme: state.theme,
+                          );
+                        }
+                        return HeaderContent();
+                      }()),
                       (() {
                         if (state is SearchInitialLoaded ||
                             state is SearchInitialLoading) {
@@ -127,7 +142,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontSize: 17,
-                                              color: buttonDark,
+                                              color: dark,
                                               fontFamily: "SF-Pro-Display",
                                               fontWeight: FontWeight.w600,
                                             ),
@@ -139,7 +154,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                       ),
                                     );
                                   }
-                                  return Container();
+                                  return SearchesList(
+                                      searchRequests: state.lastSearches);
                                 }()),
                               ];
                             }
