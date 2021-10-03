@@ -18,7 +18,7 @@ class MediaPiece {
     };
   }
 
-  factory MediaPiece.fromList(List<String> map) {
+  factory MediaPiece.fromList(List<dynamic> map) {
     return MediaPiece(
       name: map[0],
       imageLink: map[2],
