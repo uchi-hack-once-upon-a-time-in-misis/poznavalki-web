@@ -1,4 +1,9 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/io_client.dart';
 import 'package:uchi_web/pages/search_screen/states/search_finging.dart';
 import 'package:uchi_web/pages/search_screen/states/search_found.dart';
 import 'package:uchi_web/pages/search_screen/states/search_initial_loaded.dart';
@@ -8,6 +13,7 @@ import 'package:uchi_web/shared/models/media_piece.dart';
 import 'package:uchi_web/shared/models/search_request.dart';
 import 'package:uchi_web/shared/models/search_result.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class SearchCubit extends Cubit<SearchState> {
   SearchCubit() : super(SearchInitialLoading()) {
@@ -25,7 +31,7 @@ class SearchCubit extends Cubit<SearchState> {
             ))
         .toList();
 
-    searches=searches?.reversed.toList();
+    searches = searches?.reversed.toList();
 
     emit(SearchInitialLoaded(lastSearches: searches ?? []));
   }
@@ -45,28 +51,45 @@ class SearchCubit extends Cubit<SearchState> {
       );
     }
 
-    SearchResult result = SearchResult(
-      arlicles: [
-        MediaPiece(link: "https://vk.com/im", name: "sdasdsadas"),
-        MediaPiece(link: "hts:link2", name: "sdasdsadas"),
-        MediaPiece(
-            link:
-                "hts:link2link2link2linlink2link2link2liink2link2link2linlink2link2link2liink2link2link2linlink2link2link2liink2link2link2linlink2link2link2liink2link2link2linlink2link2link2link2link2link2",
-            name: "sdasdsadas"),
-        MediaPiece(link: "hts:link2", name: "sdasdsadas"),
-        MediaPiece(link: "hts:link2", name: "sdasdsadas"),
-        MediaPiece(
-            link: "hts:link2",
-            name:
-                "sdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdassdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdassdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdassdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadas"),
-        MediaPiece(
-            link: "hts:link1",
-            name: "sdasdsadas",
-            imageLink:
-                "https://www.aluminati.net/wp-content/uploads/2016/03/img-placeholder.png")
-      ],
-      videos: [],
+    // SearchResult resultT = SearchResult(
+    //   sites: [
+    //     MediaPiece(link: "https://vk.com/im", name: "sdasdsadas"),
+    //     MediaPiece(link: "hts:link2", name: "sdasdsadas"),
+    //     MediaPiece(
+    //         link:
+    //             "hts:link2link2link2linlink2link2link2liink2link2link2linlink2link2link2liink2link2link2linlink2link2link2liink2link2link2linlink2link2link2liink2link2link2linlink2link2link2link2link2link2",
+    //         name: "sdasdsadas"),
+    //     MediaPiece(link: "hts:link2", name: "sdasdsadas"),
+    //     MediaPiece(link: "hts:link2", name: "sdasdsadas"),
+    //     MediaPiece(
+    //         link: "hts:link2",
+    //         name:
+    //             "sdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdassdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdassdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdassdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadas"),
+    //     MediaPiece(
+    //         link: "hts:link1",
+    //         name: "sdasdsadas",
+    //         imageLink:
+    //             "https://www.aluminati.net/wp-content/uploads/2016/03/img-placeholder.png")
+    //   ],
+    //   vids: [],
+    // );
+
+    var rez = await http.get(
+      Uri.parse('https://poz-app.herokuapp.com/search?theme=l&body=l'),
     );
+
+    SearchResult result = SearchResult(pics: [], sites: [], vids: []);
+    if (rez.statusCode == 200) {
+      result = SearchResult.fromJson(rez.body);
+    }
+
+    //https://jsonplaceholder.typicode.com/albums/1
+
+    // var rez = await http.get(Uri.parse(
+    //     'https://poz-app.herokuapp.com/search?theme=${theme}&body=${body}'));
+
+    // print(response);
+
     emit(SearchFound(searchResult: result, theme: theme, body: body));
   }
 }

@@ -164,10 +164,13 @@ class _SearchScreenState extends State<SearchScreen> {
                                 LinksList(
                                   mediaPieces: (() {
                                     if (mediaType == MediaType.article) {
-                                      return state.searchResult.arlicles;
+                                      return state.searchResult.sites;
                                     }
                                     if (mediaType == MediaType.video) {
-                                      return state.searchResult.videos;
+                                      return state.searchResult.vids;
+                                    }
+                                    if (mediaType == MediaType.picture) {
+                                      return state.searchResult.pics;
                                     }
                                     return <MediaPiece>[];
                                   }()),

@@ -83,6 +83,27 @@ class MediaTypeSwitcher extends StatelessWidget {
                         switchType(MediaType.video);
                       },
                     ),
+                    Container(
+                      height: 20,
+                    ),
+                    NoBlinkInkWell(
+                      child: Text(
+                        'Картинки',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: "SF-Pro-Display",
+                          fontWeight: curType == MediaType.picture
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: curType == MediaType.picture
+                              ? backgroundBright
+                              : Colors.black,
+                        ),
+                      ),
+                      onTap: () {
+                        switchType(MediaType.picture);
+                      },
+                    ),
                   ],
                 ),
               ),

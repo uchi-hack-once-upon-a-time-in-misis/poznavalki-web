@@ -18,15 +18,15 @@ class MediaPiece {
     };
   }
 
-  factory MediaPiece.fromMap(Map<String, dynamic> map) {
+  factory MediaPiece.fromList(List<String> map) {
     return MediaPiece(
-      name: map['name'],
-      imageLink: map['imageLink'],
-      link: map['link'],
+      name: map[0],
+      imageLink: map[2],
+      link: map[1],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory MediaPiece.fromJson(String source) => MediaPiece.fromMap(json.decode(source));
+  factory MediaPiece.fromJson(String source) => MediaPiece.fromList(json.decode(source));
 }
