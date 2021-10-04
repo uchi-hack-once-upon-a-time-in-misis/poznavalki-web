@@ -29,7 +29,7 @@ class _MediaTypeSwitcherState extends State<MediaTypeSwitcher> {
       setState(() {
         borderRadius = 18;
         _height = 400;
-        opened=true;
+        opened = true;
       });
     }
   }
@@ -69,7 +69,7 @@ class _MediaTypeSwitcherState extends State<MediaTypeSwitcher> {
               ),
               color: Colors.white,
             ),
-            duration: Duration(milliseconds: 200),
+            duration: Duration(milliseconds: 100),
             child: Center(
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
@@ -90,7 +90,10 @@ class _MediaTypeSwitcherState extends State<MediaTypeSwitcher> {
                         ),
                       ),
                       onTap: () {
-                        widget.switchType(MediaType.article);
+                        _hide();
+                        Future.delayed(Duration(milliseconds: 100), () {
+                          widget.switchType(MediaType.article);
+                        });
                       },
                     ),
                     Container(
@@ -111,7 +114,10 @@ class _MediaTypeSwitcherState extends State<MediaTypeSwitcher> {
                         ),
                       ),
                       onTap: () {
-                        widget.switchType(MediaType.video);
+                        _hide();
+                        Future.delayed(Duration(milliseconds: 100), () {
+                          widget.switchType(MediaType.video);
+                        });
                       },
                     ),
                     Container(
@@ -132,7 +138,10 @@ class _MediaTypeSwitcherState extends State<MediaTypeSwitcher> {
                         ),
                       ),
                       onTap: () {
-                        widget.switchType(MediaType.picture);
+                        _hide();
+                        Future.delayed(Duration(milliseconds: 100), () {
+                          widget.switchType(MediaType.picture);
+                        });
                       },
                     ),
                   ],
