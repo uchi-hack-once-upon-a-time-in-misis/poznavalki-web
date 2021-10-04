@@ -3,7 +3,7 @@ import 'package:uchi_web/pages/search_screen/media_types.dart';
 import 'package:uchi_web/shared/colors.dart';
 import 'package:uchi_web/shared/no_blink_inkwell.dart';
 
-class MediaTypeSwitcher extends StatelessWidget {
+class MediaTypeSwitcher extends StatefulWidget {
   const MediaTypeSwitcher(
       {Key? key,
       required this.close,
@@ -16,7 +16,34 @@ class MediaTypeSwitcher extends StatelessWidget {
   final void Function(MediaType) switchType;
 
   @override
+  State<MediaTypeSwitcher> createState() => _MediaTypeSwitcherState();
+}
+
+class _MediaTypeSwitcherState extends State<MediaTypeSwitcher> {
+  double? _height = 0;
+  double borderRadius = 0;
+  bool opened = false;
+
+  _open() {
+    if (!opened) {
+      setState(() {
+        borderRadius = 18;
+        _height = 400;
+        opened=true;
+      });
+    }
+  }
+
+  _hide() {
+    setState(() {
+      borderRadius = 0;
+      _height = 0;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) => _open());
     return Container(
       color: Colors.black.withAlpha(100),
       child: Column(
@@ -26,19 +53,23 @@ class MediaTypeSwitcher extends StatelessWidget {
             child: NoBlinkInkWell(
               child: Container(),
               onTap: () {
-                close();
+                _hide();
+                Future.delayed(Duration(milliseconds: 100), () {
+                  widget.close();
+                });
               },
             ),
           ),
-          Container(
-            height: 400,
+          AnimatedContainer(
+            height: _height,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(18),
-                topRight: Radius.circular(18),
+                topLeft: Radius.circular(borderRadius),
+                topRight: Radius.circular(borderRadius),
               ),
               color: Colors.white,
             ),
+            duration: Duration(milliseconds: 200),
             child: Center(
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
@@ -49,17 +80,17 @@ class MediaTypeSwitcher extends StatelessWidget {
                         'Статьи',
                         style: TextStyle(
                           fontSize: 20,
-                          fontWeight: curType == MediaType.article
+                          fontWeight: widget.curType == MediaType.article
                               ? FontWeight.bold
                               : FontWeight.normal,
                           fontFamily: "SF-Pro-Display",
-                          color: curType == MediaType.article
+                          color: widget.curType == MediaType.article
                               ? backgroundBright
                               : Colors.black,
                         ),
                       ),
                       onTap: () {
-                        switchType(MediaType.article);
+                        widget.switchType(MediaType.article);
                       },
                     ),
                     Container(
@@ -71,16 +102,16 @@ class MediaTypeSwitcher extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: "SF-Pro-Display",
-                          fontWeight: curType == MediaType.video
+                          fontWeight: widget.curType == MediaType.video
                               ? FontWeight.bold
                               : FontWeight.normal,
-                          color: curType == MediaType.video
+                          color: widget.curType == MediaType.video
                               ? backgroundBright
                               : Colors.black,
                         ),
                       ),
                       onTap: () {
-                        switchType(MediaType.video);
+                        widget.switchType(MediaType.video);
                       },
                     ),
                     Container(
@@ -92,16 +123,16 @@ class MediaTypeSwitcher extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontFamily: "SF-Pro-Display",
-                          fontWeight: curType == MediaType.picture
+                          fontWeight: widget.curType == MediaType.picture
                               ? FontWeight.bold
                               : FontWeight.normal,
-                          color: curType == MediaType.picture
+                          color: widget.curType == MediaType.picture
                               ? backgroundBright
                               : Colors.black,
                         ),
                       ),
                       onTap: () {
-                        switchType(MediaType.picture);
+                        widget.switchType(MediaType.picture);
                       },
                     ),
                   ],
