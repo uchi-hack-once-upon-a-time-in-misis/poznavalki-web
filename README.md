@@ -3,6 +3,6 @@
 
 # РАЗРАБОТЧИКИ
 Сагеев Владислав frontend https://t.me/vforvlane
----
+***
 Саблин Илья design(https://www.figma.com/file/2Tao0yyAoWdvpadRO4RLH3/Mobile-app-DEV?node-id=145%3A2102) https://t.me/isablin
----
+
