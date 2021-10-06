@@ -4,50 +4,54 @@ import 'package:uchi_web/shared/colors.dart';
 import 'package:uchi_web/shared/models/media_piece.dart';
 
 class LinksList extends StatelessWidget {
-  LinksList({Key? key, required this.mediaPieces}) : super(key: key);
+  LinksList({Key? key, required this.mediaPieces, required this.isScrolling})
+      : super(key: key);
 
   List<MediaPiece> mediaPieces;
+  bool isScrolling;
 
   @override
   Widget build(BuildContext context) {
-    int length = mediaPieces.length;
-    if (length == 0) {
+    if (mediaPieces.length == 0) {
       return Container(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Text(
-          'Ничего не нашлось',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 17,
-            color: dark,
-            fontFamily: "SF-Pro-Display",
-            fontWeight: FontWeight.w600,
+        child: Center(
+          child: Column(
+            children: [
+              Container(
+                height: 60,
+              ),
+              Text(
+                'Ничего не нашлось',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 17,
+                  color: dark,
+                  fontFamily: "SF-Pro-Display",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
         ),
       );
     }
-    int i = 0;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: mediaPieces.map((e) {
-        ++i;
+
+    return ListView.separated(
+      padding: EdgeInsets.all(0),
+      physics: isScrolling
+          ? ClampingScrollPhysics()
+          : NeverScrollableScrollPhysics(),
+      itemCount: mediaPieces.length,
+      separatorBuilder: (BuildContext context, int index) {
         return Container(
-          child: LinkWidget(
-            mediaPiece: e,
-          ),
-          padding: EdgeInsets.only(bottom: i < length ? 20 : 0),
+          height: 20,
         );
-      }).toList(),
+      },
+      itemBuilder: (BuildContext context, int index) {
+        return LinkWidget(
+          mediaPiece: mediaPieces[index],
+        );
+      },
     );
-    // return ListView.builder(
-    //   padding: EdgeInsets.all(0),
-    //   physics: BouncingScrollPhysics(),
-    //   itemCount: mediaPieces.length,
-    //   itemBuilder: (BuildContext context, int index) {
-    //     return LinkWidget(
-    //       mediaPiece: mediaPieces[index],
-    //     );
-    //   },
-    // );
   }
 }

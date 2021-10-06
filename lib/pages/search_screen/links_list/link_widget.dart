@@ -48,13 +48,14 @@ class LinkWidget extends StatelessWidget {
                       width: MediaQuery.of(context).size.width,
                       child: Image.network(
                         mediaPiece.imageLink ??
-                            "https://www.aluminati.net/wp-content/uploads/2016/03/img-placeholder.png",
+                            "https://filestore.community.support.microsoft.com/api/images/72e3f188-79a1-465f-90ca-27262d769841",
+                        filterQuality: FilterQuality.none,                    
                         fit: BoxFit.cover,
                       ),
                     ),
                     Container(
                       height: 400,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,

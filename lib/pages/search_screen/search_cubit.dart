@@ -51,44 +51,42 @@ class SearchCubit extends Cubit<SearchState> {
       );
     }
 
-    // SearchResult resultT = SearchResult(
-    //   sites: [
-    //     MediaPiece(link: "https://vk.com/im", name: "sdasdsadas"),
-    //     MediaPiece(link: "hts:link2", name: "sdasdsadas"),
-    //     MediaPiece(
-    //         link:
-    //             "hts:link2link2link2linlink2link2link2liink2link2link2linlink2link2link2liink2link2link2linlink2link2link2liink2link2link2linlink2link2link2liink2link2link2linlink2link2link2link2link2link2",
-    //         name: "sdasdsadas"),
-    //     MediaPiece(link: "hts:link2", name: "sdasdsadas"),
-    //     MediaPiece(link: "hts:link2", name: "sdasdsadas"),
-    //     MediaPiece(
-    //         link: "hts:link2",
-    //         name:
-    //             "sdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdassdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdassdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdassdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadassdasdsadas"),
-    //     MediaPiece(
-    //         link: "hts:link1",
-    //         name: "sdasdsadas",
-    //         imageLink:
-    //             "https://www.aluminati.net/wp-content/uploads/2016/03/img-placeholder.png")
-    //   ],
-    //   vids: [],
-    // );
-
-    var rez = await http.get(
-      Uri.parse('https://poz-app.herokuapp.com/search?theme=${theme}&body=${body}'),
-    );
+    // List<MediaPiece> sampleList = [
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    //   MediaPiece.empty(),
+    // ];
 
     SearchResult result = SearchResult(pics: [], sites: [], vids: []);
-    if (rez.statusCode == 200) {
-      result = SearchResult.fromJson(rez.body);
-    }
 
-    //https://jsonplaceholder.typicode.com/albums/1
+    try {
+      var rez = await http.get(
+        Uri.parse(
+            'https://poz-app.herokuapp.com/search?theme=${theme}&body=${body}'),
+      );
 
-    // var rez = await http.get(Uri.parse(
-    //     'https://poz-app.herokuapp.com/search?theme=${theme}&body=${body}'));
-
-    // print(response);
+      if (rez.statusCode == 200) {
+        result = SearchResult.fromJson(rez.body);
+      }
+    } catch (e) {}
 
     emit(SearchFound(searchResult: result, theme: theme, body: body));
   }

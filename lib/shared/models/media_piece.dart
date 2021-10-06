@@ -10,6 +10,10 @@ class MediaPiece {
     this.imageLink,
   });
 
+  MediaPiece.empty()
+      : this.name = "",
+        this.link = "";
+
   Map<String, dynamic> toMap() {
     return {
       'name': name,
@@ -28,5 +32,6 @@ class MediaPiece {
 
   String toJson() => json.encode(toMap());
 
-  factory MediaPiece.fromJson(String source) => MediaPiece.fromList(json.decode(source));
+  factory MediaPiece.fromJson(String source) =>
+      MediaPiece.fromList(json.decode(source));
 }

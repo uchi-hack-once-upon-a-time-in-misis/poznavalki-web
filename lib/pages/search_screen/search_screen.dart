@@ -26,6 +26,22 @@ class _SearchScreenState extends State<SearchScreen> {
   MediaType mediaType = MediaType.article;
   bool mediaTypeSwitcherShown = false;
 
+  bool _scrollingBuilder = false;
+
+  ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      setState(() {
+        _scrollingBuilder = _scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent;
+      });
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -36,7 +52,8 @@ class _SearchScreenState extends State<SearchScreen> {
             return Stack(
               children: [
                 SingleChildScrollView(
-                  physics: ClampingScrollPhysics(),
+                  controller: _scrollController,
+                  physics: const ClampingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -117,68 +134,48 @@ class _SearchScreenState extends State<SearchScreen> {
                       }()),
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(18),
+                              topRight: Radius.circular(18)),
                           color: background,
                         ),
+                        constraints: BoxConstraints(
+                            minHeight: 100,
+                            maxHeight: MediaQuery.of(context).size.height),
                         clipBehavior: Clip.hardEdge,
-                        child: Column(
-                          children: (() {
-                            if (state is SearchInitialLoaded) {
-                              return [
-                                (() {
-                                  if (state.lastSearches.length == 0) {
-                                    return Container(
-                                      constraints:
-                                          BoxConstraints(maxWidth: 200),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: 20,
-                                          ),
-                                          Image.asset(
-                                              'assets/Learning-pana-1.png'),
-                                          Text(
-                                            'Здесь появится история ваших запросов',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              color: dark,
-                                              fontFamily: "SF-Pro-Display",
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          Container(
-                                            height: 20,
-                                          ),
-                                        ],
-                                      ),
+                        child: Stack(
+                          children: [
+                            Container(
+                              child: (() {
+                                if (state is SearchInitialLoaded) {
+                                  return (() {
+                                    return SearchesList(
+                                      searchRequests: state.lastSearches,
+                                      isScrolling: _scrollingBuilder,
                                     );
-                                  }
-                                  return SearchesList(
-                                      searchRequests: state.lastSearches);
-                                }()),
-                              ];
-                            }
-                            if (state is SearchFound) {
-                              return [
-                                LinksList(
-                                  mediaPieces: (() {
-                                    if (mediaType == MediaType.article) {
-                                      return state.searchResult.sites;
-                                    }
-                                    if (mediaType == MediaType.video) {
-                                      return state.searchResult.vids;
-                                    }
-                                    if (mediaType == MediaType.picture) {
-                                      return state.searchResult.pics;
-                                    }
-                                    return <MediaPiece>[];
-                                  }()),
-                                ),
-                              ];
-                            }
-                            return <Widget>[];
-                          }()),
+                                  }());
+                                }
+                                if (state is SearchFound) {
+                                  return LinksList(
+                                    mediaPieces: (() {
+                                      if (mediaType == MediaType.article) {
+                                        return state.searchResult.sites;
+                                      }
+                                      if (mediaType == MediaType.video) {
+                                        return state.searchResult.vids;
+                                      }
+                                      if (mediaType == MediaType.picture) {
+                                        return state.searchResult.pics;
+                                      }
+                                      return <MediaPiece>[];
+                                    }()),
+                                    isScrolling: _scrollingBuilder,
+                                  );
+                                }
+                                return Container();
+                              }()),
+                            ),
+                          ],
                         ),
                       ),
                     ],
